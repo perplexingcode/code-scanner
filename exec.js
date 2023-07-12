@@ -59,7 +59,7 @@ function writeFolderTreeToFile(folderTree, projectName) {
   const wordCount = countWords(treeString);
   if (wordCount > 25000) {
     console.warn(
-      `Warning: The word count (${wordCount}) exceeds 25,000 words.`,
+      `Warning: The word count (${wordCount}) exceeds 25,000 words. Please add more files or folders to the ignore list in config.js.`,
     );
   }
 
