@@ -42,7 +42,12 @@ function scanDirectory(directoryPath, folderTree) {
 }
 
 function writeFolderTreeToFile(folderTree, projectName) {
-  const filePath = path.join(__dirname, `./output/${projectName}.txt`);
+  const filePath = path.join(
+    __dirname,
+    `./output/${
+      projectName || directory.replace(":", "-").replaceAll("/", "-")
+    }.txt`,
+  );
   const treeString = JSON.stringify(folderTree, null, 2);
   fs.writeFileSync(filePath, treeString);
   console.log(
