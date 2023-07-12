@@ -64,7 +64,7 @@ function writeFolderTreeToFile(folderTree, projectName) {
   }
 
   console.log(
-    `Folder tree has been written to ${projectName}.txt successfully.
+    `Folder content has been written to ${projectName}.txt successfully.
     Word count: ${wordCount} words.`,
   );
 }
