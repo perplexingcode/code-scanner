@@ -1,11 +1,8 @@
 const fs = require("fs");
 const path = require("path");
-const { directory, ignoreList } = require("./config");
+const { directory, ignoreList, extractList, projectName } = require("./config");
 
 function scanProject(projectPath) {
-  // Use the imported constant here if needed
-  console.log(directory);
-
   const folderTree = {};
   const projectName = path.basename(projectPath);
   folderTree[projectName] = {};
@@ -17,6 +14,10 @@ function scanProject(projectPath) {
 
 function shouldIgnore(item) {
   return ignoreList.includes(item);
+}
+
+function shouldExtract(item) {
+  return extractList.some((extension) => item.endsWith(extension));
 }
 
 function scanDirectory(directoryPath, folderTree) {
@@ -33,11 +34,23 @@ function scanDirectory(directoryPath, folderTree) {
     if (isDirectory) {
       folderTree[item] = {};
       scanDirectory(itemPath, folderTree[item]);
+    } else if (shouldExtract(item)) {
+      const content = fs.readFileSync(itemPath, "utf8");
+      folderTree[item] = content;
     }
   });
+}
+
+function writeFolderTreeToFile(folderTree, projectName) {
+  const filePath = path.join(__dirname, `./output/${projectName}.txt`);
+  const treeString = JSON.stringify(folderTree, null, 2);
+  fs.writeFileSync(filePath, treeString);
+  console.log(
+    `Folder tree has been written to ${projectName}.txt successfully.`,
+  );
 }
 
 // Example usage
 const projectPath = directory;
 const folderTree = scanProject(projectPath);
-console.log(JSON.stringify(folderTree, null, 2));
+writeFolderTreeToFile(folderTree, projectName);
