@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { directory } = require("./config");
+const { directory, ignoreList } = require("./config");
 
 function scanProject(projectPath) {
   // Use the imported constant here if needed
@@ -15,10 +15,18 @@ function scanProject(projectPath) {
   return folderTree;
 }
 
+function shouldIgnore(item) {
+  return ignoreList.includes(item);
+}
+
 function scanDirectory(directoryPath, folderTree) {
   const items = fs.readdirSync(directoryPath);
 
   items.forEach((item) => {
+    if (shouldIgnore(item)) {
+      return;
+    }
+
     const itemPath = path.join(directoryPath, item);
     const isDirectory = fs.statSync(itemPath).isDirectory();
 
