@@ -41,6 +41,11 @@ function scanDirectory(directoryPath, folderTree) {
   });
 }
 
+function countWords(text) {
+  const words = text.trim().split(/\s+/);
+  return words.length;
+}
+
 function writeFolderTreeToFile(folderTree, projectName) {
   const filePath = path.join(
     __dirname,
@@ -50,8 +55,17 @@ function writeFolderTreeToFile(folderTree, projectName) {
   );
   const treeString = JSON.stringify(folderTree, null, 2);
   fs.writeFileSync(filePath, treeString);
+
+  const wordCount = countWords(treeString);
+  if (wordCount > 25000) {
+    console.warn(
+      `Warning: The word count (${wordCount}) exceeds 25,000 words.`,
+    );
+  }
+
   console.log(
-    `Folder tree has been written to ${projectName}.txt successfully.`,
+    `Folder tree has been written to ${projectName}.txt successfully.
+    Word count: ${wordCount} words.`,
   );
 }
 
