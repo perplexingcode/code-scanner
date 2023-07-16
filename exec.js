@@ -1,6 +1,12 @@
+require("dotenv").config();
+
 const fs = require("fs");
 const path = require("path");
-const { directory, ignoreList, extractList, projectName } = require("./config");
+
+const directory = process.env.DIRECTORY;
+const ignoreList = process.env.IGNORE_LIST.split(",");
+const extractList = process.env.EXTRACT_LIST.split(",");
+const projectName = process.env.PROJECT_NAME;
 
 function scanProject(projectPath) {
   const folderTree = {};
