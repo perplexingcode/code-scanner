@@ -35,7 +35,10 @@ function scanDirectory(directoryPath, folderTree) {
       folderTree[item] = {};
       scanDirectory(itemPath, folderTree[item]);
     } else if (shouldExtract(item)) {
-      const content = fs.readFileSync(itemPath, "utf8");
+      const content = fs
+        .readFileSync(itemPath, "utf8")
+        .replaceAll("\n", " ")
+        .replace(/"/g, "'");
       folderTree[item] = content;
     }
   });
@@ -51,10 +54,10 @@ function writeFolderTreeToFile(folderTree, projectName) {
     __dirname,
     `./output/${
       projectName || directory.replace(":", "-").replaceAll("/", "-")
-    }.txt`,
+    }.json`,
   );
   const treeString = JSON.stringify(folderTree, null, 2);
-  fs.writeFileSync(filePath, treeString);
+  fs.writeFileSync(filePath, treeString.replace(/\\/g, ""));
 
   const wordCount = countWords(treeString);
   if (wordCount > 25000) {
@@ -64,7 +67,7 @@ function writeFolderTreeToFile(folderTree, projectName) {
   }
 
   console.log(
-    `Folder content has been written to ${projectName}.txt successfully.
+    `Folder content has been written to ${projectName}.json successfully.
     Word count: ${wordCount} words.`,
   );
 }

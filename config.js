@@ -21,7 +21,7 @@ const extractList = [
   ".md",
 ];
 
-const projectName = "";
+const projectName = "TRC-Management-frontend";
 
 module.exports = {
   directory,
